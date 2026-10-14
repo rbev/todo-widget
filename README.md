@@ -83,6 +83,20 @@ Any line beginning with 1–6 `#` characters followed by a space is treated as a
 
 Both lowercase `[x]` and uppercase `[X]` are recognised as completed; the indicator normalises to lowercase `[x]` when toggling.
 
+### Nested sub-tasks and notes
+
+Checkbox tasks may be nested by indenting child lines with spaces (or tabs). Indented checkbox items appear as separate checkboxes in the dropdown, indented to reflect their source depth. Plain bullet lines (`- text` without a checkbox) that are indented beneath a task appear as non-interactive, read-only notes with a bullet glyph — useful for sub-points, context, or follow-up details.
+
+```markdown
+- [ ] Parent task
+  - [ ] Child checkbox task
+  - Plain note child
+```
+
+All three lines are displayed in source order: the parent checkbox, the indented child checkbox (independently toggleable), and the indented plain bullet note. Web links in child notes are extracted into separate clickable menu items just like links in task text.
+
+Only plain bullets that are descendants of a checkbox task block are shown — standalone top-level bullets or indented bullets after unindented prose are not displayed. Blank lines within a subtree are fine; a new heading, unindented prose, or an unindented fenced code block ends the subtree.
+
 ### Due dates
 
 An optional due-date prefix may appear immediately after the checkbox, enclosed in square brackets in `YYYY-MM-DD` format:
@@ -168,7 +182,7 @@ Pure parsing, mutation, date-logic, and assertion modules are tested with Node's
 node --test
 ```
 
-This covers markdown parsing (headings, checkboxes, due dates, fences, CRLF, mixed EOL, fence length, no trailing newline, empty file, duplicate headings), date validation and overdue logic, checkbox toggling and item addition with byte-level EOL preservation, sub-bullet insertion after nested blocks, stale rejection and snapshot guard, multiline title rejection, link extraction with URL validation and deduplication, real handler tests with mocked platform APIs (including link activation and launch failure), service module-mode contract assertions, and install-script smoke testing.
+This covers markdown parsing (headings, checkboxes, due dates, fences, CRLF, mixed EOL, fence length, no trailing newline, empty file, duplicate headings, nested sub-tasks and plain bullet notes, tab indentation, block-context boundaries), date validation and overdue logic, checkbox toggling and item addition with byte-level EOL preservation, sub-bullet insertion after nested blocks, stale rejection and snapshot guard, multiline title rejection, link extraction with URL validation and deduplication, real handler tests with mocked platform APIs (including nested entry display, child toggle isolation, link activation in child notes, and launch failure), service module-mode contract assertions, and install-script smoke testing.
 
 ---
 
@@ -188,4 +202,4 @@ This stops and disables the service, removes the service file, and deletes `~/.l
 - The AppIndicator protocol does not support text-entry widgets inside the dropdown menu, so new items are created via a separate Gtk dialog window.
 - **Host rendering limit.** The checkbox appearance of `Gtk.CheckMenuItem` items in the dropdown depends on the AppIndicator implementation and GNOME Shell panel extension. On some desktop environments or panel extensions the checkmark glyph may render differently or not at all; the completion state is still tracked correctly regardless of visual appearance.
 - `setext` headings (underlined with `=` or `-`) are not treated as categories — only ATX (`#`) headings are recognised.
-- Tasks inside blockquotes, nested list contexts, or HTML blocks are not specially handled; only top-level (possibly indented) checkbox list items outside fenced code blocks are treated as tasks.
+- Tasks inside blockquotes or HTML blocks are not specially handled; only checkbox list items outside fenced code blocks are treated as tasks.

@@ -1,0 +1,15 @@
+node_modules/
+*.log
+
+# Editor / temp files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.tmp
+*.bak
+.DS_Store
+
+# pi-agent / subagent runtime
+.pi/

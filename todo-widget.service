@@ -1,0 +1,13 @@
+[Unit]
+Description=Todo Widget AppIndicator
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gjs -m %h/.local/share/todo-widget/indicator.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
